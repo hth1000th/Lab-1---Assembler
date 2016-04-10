@@ -1,0 +1,1 @@
+int getOpcode(char * command);
