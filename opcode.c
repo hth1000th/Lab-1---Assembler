@@ -3,7 +3,7 @@
 
 int getOpcode(char * command)
 {
-  char *commands[15] = {"NOP", "LDD", "LDI", "STO", "MOV", "ADI", "ADF", "OR", "AND", "XOR", "ROR", "JMP", "HLT", "LDX", "STX"};
+	char *commands[15] = {"NOP", "LDD", "LDI", "STO", "MOV", "ADI", "ADF", "OR", "AND", "XOR", "ROR", "JMP", "HLT", "LDX", "STX"};
   char *(*ptr)[15] = &commands;
   int i;
   int j = -1;
