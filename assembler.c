@@ -6,10 +6,10 @@
 
 int main(void)
 {
-	FILE *fp1 = fopen("ADD1.ASM","r+"); // Open the assembly input file;
-	FILE *fp2 = fopen("ADD1.LST","w+"); // Open the listing output file;
-	FILE *fp3 = fopen("ADD1.OBJ","w+"); // Open the object output file;
-	char header[] = "Mem Opcode\tSource"; // the header line;
+  FILE *fp1 = fopen("ADD1.ASM","r+"); // Open the assembly input file;
+  FILE *fp2 = fopen("ADD1.LST","w+"); // Open the listing output file;
+  FILE *fp3 = fopen("ADD1.OBJ","w+"); // Open the object output file;
+  char header[] = "Mem Opcode\tSource"; // the header line;
   char str[60];
   char str1[60];
   char *token, *memo;
