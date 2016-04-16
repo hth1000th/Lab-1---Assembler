@@ -14,28 +14,28 @@ int main(void)
   char str1[60];
   char *token, *memo;
   char regit;
-	int opcode, op, address, num=0;
+  int opcode, op, address, num=0;
 
-	if(fp1 == NULL) {
-		puts("Error opening file1");
-		return -1;
-	}
+  if(fp1 == NULL) {
+    puts("Error opening file1");
+    return -1;
+  }
 
-	puts(header);
-	fputs(header, fp2);
-	fputs("\n", fp2);
-	address = 00;
+  puts(header);
+  fputs(header, fp2);
+  fputs("\n", fp2);
+  address = 00;
   //!feof(fp1)
 
-	while(fgets(str, 60, fp1)) {
+  while(fgets(str, 60, fp1)) {
 		//fgets(str, 60, fp1);
     //if(feof(fp1)) break;
-		if(strncmp(str,";",1) == 0 || strncmp(str,"\n",2) == 0) { // if it is a comment line;
+    if(strncmp(str,";",1) == 0 || strncmp(str,"\n",2) == 0) { // if it is a comment line;
       printf("0%d\t\t",address); // print address 00 to screen;
       printf("%s", str); // print results to screen;
-			fprintf(fp2, "0%d\t\t\t\t\t", address); // print address 00 to listing file;
-			fputs(str, fp2); // print results to listing file;
-		}
+      fprintf(fp2, "0%d\t\t\t\t\t", address); // print address 00 to listing file;
+      fputs(str, fp2); // print results to listing file;
+    }
     else { // if it is not a comment line;
       strcpy(str1,str);
       token = strtok(str, " ,\t\n");
@@ -109,9 +109,9 @@ int main(void)
     }
   }
 
-	fclose(fp1);
-	fclose(fp2);
-	fclose(fp3);
+  fclose(fp1);
+  fclose(fp2);
+  fclose(fp3);
 
-	return 0;
+  return 0;
 }
