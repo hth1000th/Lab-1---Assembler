@@ -10,10 +10,10 @@ int main(void)
 	FILE *fp2 = fopen("ADD1.LST","w+"); // Open the listing output file;
 	FILE *fp3 = fopen("ADD1.OBJ","w+"); // Open the object output file;
 	char header[] = "Mem Opcode\tSource"; // the header line;
-	char str[60];
+  char str[60];
   char str1[60];
-	char *token, *memo;
-	char regit;
+  char *token, *memo;
+  char regit;
 	int opcode, op, address, num=0;
 
 	if(fp1 == NULL) {
