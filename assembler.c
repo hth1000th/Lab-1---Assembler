@@ -1,7 +1,7 @@
 #include "opcode.h"
-//#include "helper_functions.h"
+#include "helper_functions.h"
 #include <stdio.h>
-#include <string.h>
+#include <string.h> // strtok()
 #include <ctype.h>
 
 int main(void)
@@ -9,106 +9,43 @@ int main(void)
   FILE *fp1 = fopen("ADD1.ASM","r+"); // Open the assembly input file;
   FILE *fp2 = fopen("ADD1.LST","w+"); // Open the listing output file;
   FILE *fp3 = fopen("ADD1.OBJ","w+"); // Open the object output file;
-  char header[] = "Mem Opcode\tSource"; // the header line;
-  char str[60];
-  char str1[60];
-  char *token, *memo;
-  char regit;
-  int opcode, op, address, num=0;
+  char header[] = "Mem Opcode\tSource";
+  char str[60], str1[60];
+  char *token;
+  char memo[3] = {'0','0','0'};
+  char final_line[15];
+  int opcode;
+  int address[2] = {0,0}; // set address to zero
 
   if(fp1 == NULL) {
     puts("Error opening file1");
     return -1;
   }
+  puts(header); // print the header line to screen;
+  fprintf(fp2, "%s\n", header); // print the header line to listing file;
 
-  puts(header);
-  fputs(header, fp2);
-  fputs("\n", fp2);
-  address = 00;
-  //!feof(fp1)
-
-  while(fgets(str, 60, fp1)) {
-		//fgets(str, 60, fp1);
-    //if(feof(fp1)) break;
-    if(strncmp(str,";",1) == 0 || strncmp(str,"\n",2) == 0) { // if it is a comment line;
-      printf("0%d\t\t",address); // print address 00 to screen;
-      printf("%s", str); // print results to screen;
-      fprintf(fp2, "0%d\t\t\t\t\t", address); // print address 00 to listing file;
-      fputs(str, fp2); // print results to listing file;
+  while(fgets(str, 60, fp1)) { // while there are input lines to read;
+    if(is_comment(str) || is_blank(str)) {  // if it is a comment line;
+      printf("00\t\t%s", str);
+      fprintf(fp2, "00\t\t\t\t\t%s", str);
     }
-    else { // if it is not a comment line;
-      strcpy(str1,str);
-      token = strtok(str, " ,\t\n");
-      printf("0%d ", address);
-      fprintf(fp2, "0%d ", address);
-      while(token!=NULL){
-        if(strncmp(token,";",1)==0) break;
-        op = getOpcode(token);
-
-        if(strncmp(token,"R",1) == 0){
-          regit = token[1];
-          printf("%c", regit);
-          fprintf(fp2, "%c", regit);
-          fprintf(fp3, "%c", regit);
-          num++;
-          if(num==2) {
-            printf(" ");
-            fprintf(fp2, " ");
-            fprintf(fp3, " ");
-            num=0;
-          }
-        }
-        else if(op == -1) {
-          memo = token;
-          printf("%s", memo);
-          fprintf(fp2, "%s", memo);
-          fprintf(fp3, "%s", memo);
-          num += 2;
-          if(num==2) {
-            printf(" ");
-            fprintf(fp2, " ");
-            fprintf(fp3, " ");
-            num=0;
-          }
-        }
-        else {
-          opcode = op;
-
-          if(opcode==0 || opcode==12) {
-            printf("%x0 00", opcode);
-            fprintf(fp2, "%x0 00", opcode);
-            fprintf(fp3, "%x0 00", opcode);
-          }
-          else if(opcode>=10) { //change opcode to A,B,C,D, or E;
-            printf("%x", opcode);
-            fprintf(fp2, "%x", opcode);
-            fprintf(fp3, "%x", opcode);
-            num++;
-          }
-          else {
-            printf("%d", opcode);
-            fprintf(fp2, "%d", opcode);
-            fprintf(fp3, "%d", opcode);
-            num++;
-          }
-          if(num==2) {
-            printf(" ");
-            fprintf(fp2, " ");
-            fprintf(fp3, " ");
-            num=0;
-          }
-        }
-        token = strtok(NULL, " ,\t\n");
+    else {  // if it is an executable line;
+      strcpy(str1, str);
+      token = strtok(str, " ,\t\n"); // get first token;
+      opcode = getOpcode(token); // get the opcode for the token;
+      if(opcode == -1) {
+        printf("Invalid opcode!\n");
+        continue;
       }
-      printf("\t");
-      printf("%s", str1);
-      fprintf(fp2, "\t\t");
-      fprintf(fp2, "%s", str1);
-      address += 2;
-      str[60] = '0';
+      select_commands(opcode, memo); // select groups for appropriate opcode
+      sprintf(final_line, "%X%X %X%c %c%c", address[0], address[1],
+              opcode, memo[0], memo[1], memo[2]); // assemble final line
+      printf("%s\t%s", final_line, str1);
+      fprintf(fp2, "%s\t\t%s", final_line, str1);
+      fprintf(fp3, "%X%c %c%c ", opcode, memo[0], memo[1], memo[2]);
+      increment_address(address); // increment address by 2;
     }
   }
-
   fclose(fp1);
   fclose(fp2);
   fclose(fp3);
