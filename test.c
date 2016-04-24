@@ -8,22 +8,22 @@
 
 int main(void) {
 
-  	test_getOpcode();
-    test_is_comment();
-    test_is_blank();
-    test_is_register();
+  test_getOpcode();
+  test_is_comment();
+  test_is_blank();
+  test_is_register();
 
-  	puts("testing complete");
-  	return 0;
+  puts("testing complete");
+  return 0;
 }
 
 void test_getOpcode() {
-  	puts("testing int getOpcode(char * command)");
-  	assert(getOpcode("LDD") == 1);
-    assert(getOpcode("CAT") == -1);
-  	assert(getOpcode("STO") == 3);
-    assert(getOpcode("NOP") == 0);
-    assert(getOpcode("STX") == 14);
+  puts("testing int getOpcode(char * command)");
+  assert(getOpcode("LDD") == 1);
+  assert(getOpcode("CAT") == -1);
+  assert(getOpcode("STO") == 3);
+  assert(getOpcode("NOP") == 0);
+  assert(getOpcode("STX") == 14);
 }
 void test_is_comment() {
   puts("testing int is_comment(char * str)");
