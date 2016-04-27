@@ -12,8 +12,8 @@ int main(void)
   char header[] = "Mem Opcode\tSource";
   char str[60], str1[60];
   char *token;
-  char memo[3] = {'0','0','0'};
-  char final_line[15];
+  char memo[3];
+  char current_line[15];
   int opcode;
   int address[2] = {0,0}; // set address to zero
 
@@ -26,8 +26,8 @@ int main(void)
 
   while(fgets(str, 60, fp1)) { // while there are input lines to read;
     if(is_comment(str) || is_blank(str)) {  // if it is a comment line;
-      printf("00\t\t%s", str);
-      fprintf(fp2, "00\t\t\t\t\t%s", str);
+      printf("%X%X\t\t%s", address[0], address[1], str);
+      fprintf(fp2, "%X%X\t\t\t\t\t%s", address[0], address[1], str);
     }
     else {  // if it is an executable line;
       strcpy(str1, str);
@@ -38,10 +38,10 @@ int main(void)
         continue;
       }
       select_commands(opcode, memo); // select groups for appropriate opcode
-      sprintf(final_line, "%X%X %X%c %c%c", address[0], address[1],
+      sprintf(current_line, "%X%X %X%c %c%c", address[0], address[1],
               opcode, memo[0], memo[1], memo[2]); // assemble final line
-      printf("%s\t%s", final_line, str1);
-      fprintf(fp2, "%s\t\t%s", final_line, str1);
+      printf("%s\t%s", current_line, str1);
+      fprintf(fp2, "%s\t\t%s", current_line, str1);
       fprintf(fp3, "%X%c %c%c ", opcode, memo[0], memo[1], memo[2]);
       increment_address(address); // increment address by 2;
     }
