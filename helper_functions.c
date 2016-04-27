@@ -74,14 +74,11 @@ void select_commands(int opcode, char memo[])
 {
   switch(opcode) {
     case 0:
-      command_group1(memo); // Group 1;
-      break;
     case 12:
       command_group1(memo); // Group 1;
       break;
-    case 13:                // Group 3;
-      command_group3(memo);
-      break;
+    case 4:
+    case 13:
     case 14:                // Group 3;
       command_group3(memo);
       break;
